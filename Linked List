@@ -1,0 +1,236 @@
+#include<iostream>
+using namespace std;
+int len=0;
+struct node
+{
+    int data;
+    node* link;
+}*start;
+
+
+node* Create()
+{
+    node* ptr; int n;
+    ptr=new node;
+    cout<<"Enter the no of elements to be inserted\n";
+    cin>>n;
+    len=n;
+    cout<<"Enter the data for first node\n";
+    cin>>((*ptr).data);
+    node* start=ptr;
+    while((n-1)>0)
+    {
+        node* next=new node;
+        cout<<"Enter data for "<<len-(n-1)<<" node\n";
+        cin>>((*next).data);
+        ptr->link=next;
+        ptr=next;
+        n--;
+    }
+    ptr->link=NULL;
+    return start;
+}
+
+
+node* Insert(node* start)
+{
+    int pos, i;
+    cout<<"Enter the position of element to be inserted \n1. First\n2.last\n3.Middle\n";
+    cin>>i;
+    if(i==1)
+        pos=1;
+    else if(i==2)
+        pos=len+1;
+    else
+    {
+        cout<<"Enter Exact Position\n";
+        cin>>pos;
+    }
+    node* ins=new node;
+    cout<<"Enter the data to be inserted\n";
+    cin>>(*ins).data;
+    if(pos==1)
+    {
+        ins->link=start;
+        start=ins;
+        len++;
+        return start;
+    }
+    else if(pos==len+1)
+    {
+        node* ptr=start;
+        while(ptr->link!=NULL)
+        {
+            ptr=ptr->link;
+        }
+        if((ptr->link)==NULL)
+            {
+                ptr->link=ins;
+                ptr=ins;
+                ptr->link=NULL;
+            }
+        len++;
+        return start;
+    }
+    else if((pos>1)&&(pos<len))
+    {
+        node* ptr=start;
+        while((pos-2)>0)
+        {
+            ptr=ptr->link;
+        }
+        node* temp;
+        temp=ptr->link;
+        ptr->link=ins;
+        ins->link=temp;
+        len++;
+        return start;
+    }
+    else
+    {
+        cout<<"INVALID POSITION\n";
+        return start;
+    }
+}
+
+void Destroy(node* start)
+{
+    while(start!=NULL)
+    {
+        node* ptr=start;
+        start=start->link;
+        delete ptr;
+
+    }
+    delete ::start;
+    ::start=NULL;
+}
+
+void Length(node* start)
+{
+    cout<<"Length of list is "<<len<<endl;
+}
+
+int Findpos(node* start, int s)
+{
+    int l=1;
+    while(start!=NULL)
+    {
+        if(start->data==s)
+            return l;
+        else
+        {
+            start=start->link;
+            l++;
+        }
+    }
+    return 0;
+}
+
+void Isempty(node* start)
+{
+    if(start==NULL)
+        cout<<"List is empty\n";
+    else
+        cout<<"List is not empty\n";
+}
+void Isfull(node* start)
+{
+    node *ptr=new node;
+    if(ptr==NULL)
+        cout<<"Memory is full\n";
+    else
+        cout<<"You can add more elemets\n";
+}
+
+void Output(node* start)
+{
+    if(start==NULL)
+    {
+        cout<<"List is empty\n";
+    }
+    else
+    {
+    node* ptr;
+    ptr=start;
+    while(ptr!=NULL)
+    {
+        cout<<ptr->data<<endl;
+        ptr=ptr->link;
+    }
+    }
+}
+
+node* Reverse(node* start)
+{
+    node *next, *prev, *cur;
+    prev=NULL;
+    cur=start;
+    while(cur!=NULL)
+    {
+        next=cur->link;
+        cur->link=prev;
+        prev=cur;
+        cur=next;
+    }
+    start=prev;
+    return start;
+}
+
+int main()
+{
+    int c;
+     do
+    {
+    cout<<"0. Enter 0 to exit\n";
+    cout<<"1. Enter 1 to create list\n";
+    cout<<"2. Enter 2 to insert list\n";
+    cout<<"3. Enter 3 to destroy list\n";
+    cout<<"4. Enter 4 to find length of list\n";
+    cout<<"5. Enter 5 to find an data in list\n";
+    //cout<<"6. Enter 6 to search data in list\n";
+    //cout<<"7. Enter 7 to delete an element from list\n";
+    cout<<"8. Enter 8 to check list is empty or not\n";
+    cout<<"9. Enter 9 to check list is full or not\n";
+    cout<<"10. Enter 10 to display list\n";
+    cout<<"11. Enter 11 to reverse the list\n";
+    cin>>c;
+
+
+    switch(c)
+    {
+        //case 0 : exit(1);
+        case 1 : start=Create();
+                  break;
+        case 2 : start=Insert(start);
+                    break;
+        case 3 : Destroy(start);
+                    break;
+        case 4 : Length(start);
+                    break;
+        case 5 : cout<<"Enter the data to find\n";
+                 int s;
+                 cin>>s;
+                 int pos;
+                 pos=Findpos(start, s);
+                    if(pos==0)
+                    cout<<"element not found\n";
+                    else
+                    cout<<"pos of element "<<s<<" is "<<pos<<endl;
+                    break;
+      //  case 6 : Search(start);
+           //         break;
+      //  case 7 : Delete(start);
+             //       break;
+          case 8 : Isempty(start);
+                    break;
+          case 9 : Isfull(start);
+                     break;
+          case 10 : Output(start);
+                      break;
+          case 11 : start=Reverse(start);
+                        break;
+      default: cout<<"Wrong choice idiot\n";
+    }
+    }while(c!=0);
+}
